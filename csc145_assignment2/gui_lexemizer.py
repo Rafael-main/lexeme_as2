@@ -19,7 +19,7 @@ def lexemize():
 	# input string	
 	text = part_input.get()
 	# searches if string has operations like +,-,/,* at the beginning and end of the string 
-	not_expression = re.search('^[+-/*]+|[-/*]+$|\d+[.]\d+', text)
+	not_expression = re.search('^[+-/=*)]+|[+-/*=(]+$|\d+[.]\d+|^\d*$|^[a-zA-Z0-9]*$|^[0-9a-zA-Z]*$|^([()])*$', text)
 	output = ''
 
 	# checks if not_expression exists else it splits the expression
@@ -29,10 +29,21 @@ def lexemize():
 
 
 	else:
-		split_the_text = re.findall('[0-9a-zA-Z]+|\d+|[+-/*()]|[a-zA-Z0-9]+', text)
-		output = text + ':' + str(split_the_text)
+		split_the_text = re.findall('([0-9a-zA-Z]+|\d+|[+-/*=()]|[a-zA-Z0-9]+)', text)
+
+		if '(' in split_the_text and ')' not in split_the_text:
+			print(text + ":" + "Invalid expression")
+			output = text + ":" + "Expression invalid"
+		elif '(' not in split_the_text and ')' in split_the_text:
+			print(text + ":" + "Invalid expression")
+			output = text + ":" + "Expression invalid"
+		else:
+
+			# prints the expression
+			print(split_the_text)
+			output = text + ':' + str(split_the_text)
+
 		# splits the expression
-		print(split_the_text)
 		text_label = Label(top, text=output, font=('fixedsys', 14))
 		
 	text_label.pack()
